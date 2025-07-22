@@ -1,0 +1,43 @@
+package com.offerTrack.offerTrack.controller;
+
+import com.offerTrack.offerTrack.model.IndicateursEntreprise;
+import com.offerTrack.offerTrack.model.IndicateursMaitreOuvrage;
+import com.offerTrack.offerTrack.service.IndicateursMaitreOuvrageService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:5173/")
+@RestController
+@RequestMapping("/")
+public class IndicateursMaitreOuvrageController {
+    IndicateursMaitreOuvrageService indicateursMOService;
+
+    public IndicateursMaitreOuvrageController(IndicateursMaitreOuvrageService indicateursMOService) {
+        this.indicateursMOService = indicateursMOService;
+    }
+
+    @GetMapping("/api/indicateursMO")
+    public List<IndicateursMaitreOuvrage> getAllIndicateursMO(){
+        return indicateursMOService.getAllIndicateursMO();
+    }
+    @GetMapping("/api/indicateursMO/{id}")
+    public IndicateursMaitreOuvrage getIndicateursMOById(@PathVariable("id") int id){
+        return indicateursMOService.getIdicateursMOById(id);
+    }
+    @PostMapping("/api/indicateursMO")
+    public String createIndicateursMO(IndicateursMaitreOuvrage indicateursMO){
+        indicateursMOService.createIndicateursMO(indicateursMO);
+        return "Les Indicateurs Maitre d'Ouvrage sont crées avec succès";
+    }
+    @PutMapping("/api/indicateursMO/{id}")
+    public  String updateIndicateursMO(@PathVariable("id") int id,IndicateursMaitreOuvrage indicateursMO){
+        indicateursMOService.updateIndicateursMO(id,indicateursMO);
+        return "Les Indicateurs Maitre d'Ouvrage Modifiées avec succès";
+    }
+    @DeleteMapping("/api/indicateursMO/{id}")
+    public  String deleteIndicateursMOById(@PathVariable("id") int id){
+        indicateursMOService.deleteIndicateursMO(id);
+        return "Les Indicateurs Maitre d'Ouvrage supprimées avec succès";
+    }
+}
