@@ -1,46 +1,23 @@
-package com.offerTrack.offerTrack.model;
+package com.offerTrack.offerTrack.dto;
 
-import jakarta.persistence.*;
+import com.offerTrack.offerTrack.model.Role;
+import lombok.*;
 
-
-
-@Entity
-@Table(name = "utilisateur")
-public class Utilisateur {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+@Data
+public class RegisterDto {
     private String nom;
-    @Column(unique = true, nullable = false)
     private String email;
     private String mot_de_passe;
-    @Enumerated(EnumType.STRING)
     private Role role;
 
-    public Utilisateur() {
+    public RegisterDto() {
     }
 
-    public Utilisateur(int id, String nom, String email, String mot_de_passe) {
-        this.id = id;
+    public RegisterDto(String nom, String email, String mot_de_passe, Role role) {
         this.nom = nom;
         this.email = email;
         this.mot_de_passe = mot_de_passe;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
         this.role = role;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNom() {
@@ -65,5 +42,13 @@ public class Utilisateur {
 
     public void setMot_de_passe(String mot_de_passe) {
         this.mot_de_passe = mot_de_passe;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

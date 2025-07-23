@@ -2,6 +2,7 @@ package com.offerTrack.offerTrack.controller;
 
 import com.offerTrack.offerTrack.model.IndicateursEntreprise;
 import com.offerTrack.offerTrack.service.IndicateursEntrepriseService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,28 +16,33 @@ public class IndicateursEntrepriseController {
         this.indicateursEntService = indicateursEntService;
     }
     @GetMapping("/api/indicateursEntreprise")
+    @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN')")
     public List<IndicateursEntreprise> getAllIndicateursEnt(){
         return indicateursEntService.getAllIndicateursEnt();
     }
 
     @GetMapping("/api/indicateursEntreprise/{id}")
+    @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN')")
     public IndicateursEntreprise getIndicateursEntById(@PathVariable("id") int id, IndicateursEntreprise indicateursEnt){
         return indicateursEntService.getIndicateursEntById(id);
     }
 
     @PostMapping("/api/indicateursEntreprise")
+    @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN')")
     public String createIndicateursEnt(IndicateursEntreprise indicateursEnt){
         indicateursEntService.createIndicateursEnt(indicateursEnt);
         return "Indicateurs Entreprise créés avec succès";
     }
 
-    @PutMapping("/api/indicateusEntreprise/{id}")
+    @PutMapping("/api/indicateursEntreprise/{id}")
+    @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN')")
     public String updateIndicateusEnt(@PathVariable("id") int id,IndicateursEntreprise indicateursEnt){
         indicateursEntService.updateIndicateursEntById(id,indicateursEnt);
         return "Indicateurs Entreprise mise à jour avec succès";
     }
 
-    @DeleteMapping("/api/indicateusEntreprise/{id}")
+    @DeleteMapping("/api/indicateursEntreprise/{id}")
+    @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN')")
     public String deleteIndicateusEnt(@PathVariable("id") int id){
         indicateursEntService.deleteIndicateursEntById(id);
         return "Indicateurs Entreprise suprimmées avec succès";

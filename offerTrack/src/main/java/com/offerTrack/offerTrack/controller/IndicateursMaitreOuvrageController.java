@@ -3,6 +3,7 @@ package com.offerTrack.offerTrack.controller;
 import com.offerTrack.offerTrack.model.IndicateursEntreprise;
 import com.offerTrack.offerTrack.model.IndicateursMaitreOuvrage;
 import com.offerTrack.offerTrack.service.IndicateursMaitreOuvrageService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,24 +19,29 @@ public class IndicateursMaitreOuvrageController {
     }
 
     @GetMapping("/api/indicateursMO")
+    @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
     public List<IndicateursMaitreOuvrage> getAllIndicateursMO(){
         return indicateursMOService.getAllIndicateursMO();
     }
     @GetMapping("/api/indicateursMO/{id}")
+    @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
     public IndicateursMaitreOuvrage getIndicateursMOById(@PathVariable("id") int id){
         return indicateursMOService.getIdicateursMOById(id);
     }
     @PostMapping("/api/indicateursMO")
+    @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
     public String createIndicateursMO(IndicateursMaitreOuvrage indicateursMO){
         indicateursMOService.createIndicateursMO(indicateursMO);
         return "Les Indicateurs Maitre d'Ouvrage sont crées avec succès";
     }
     @PutMapping("/api/indicateursMO/{id}")
+    @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
     public  String updateIndicateursMO(@PathVariable("id") int id,IndicateursMaitreOuvrage indicateursMO){
         indicateursMOService.updateIndicateursMO(id,indicateursMO);
         return "Les Indicateurs Maitre d'Ouvrage Modifiées avec succès";
     }
     @DeleteMapping("/api/indicateursMO/{id}")
+    @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
     public  String deleteIndicateursMOById(@PathVariable("id") int id){
         indicateursMOService.deleteIndicateursMO(id);
         return "Les Indicateurs Maitre d'Ouvrage supprimées avec succès";
