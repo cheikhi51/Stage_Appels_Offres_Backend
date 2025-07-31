@@ -116,6 +116,8 @@ public class IUtilisateurService implements UtilisateurService {
 
     @Override
     public String createUtilisateur(Utilisateur utilisateur) {
+        String hashedPassword = passwordEncoder.encode(utilisateur.getMot_de_passe());
+        utilisateur.setMot_de_passe(hashedPassword);
         utilisateurRepository.save(utilisateur);
         return "creation avec succèss";
     }
