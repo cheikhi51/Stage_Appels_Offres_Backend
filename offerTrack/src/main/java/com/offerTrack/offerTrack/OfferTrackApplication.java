@@ -20,8 +20,6 @@ public class OfferTrackApplication {
 		try {
 			// Check if .env file exists
 			File envFile = new File(".env");
-			System.out.println("Looking for .env file at: " + envFile.getAbsolutePath());
-			System.out.println(".env file exists: " + envFile.exists());
 
 			if (!envFile.exists()) {
 				// Try different locations
@@ -32,7 +30,6 @@ public class OfferTrackApplication {
 				};
 
 				for (File file : possibleLocations) {
-					System.out.println("Trying: " + file.getAbsolutePath() + " - exists: " + file.exists());
 					if (file.exists()) {
 						envFile = file;
 						break;
@@ -52,7 +49,6 @@ public class OfferTrackApplication {
 				String key = entry.getKey();
 				String value = entry.getValue();
 				System.setProperty(key, value);
-				System.out.println("Loaded env var: " + key + " = " + value);
 			});
 
 			System.out.println("Environment variables loaded successfully!");
@@ -65,7 +61,6 @@ public class OfferTrackApplication {
 			// Fallback: try to get from system environment
 			String dbUrl = System.getenv("DB_URL");
 			if (dbUrl != null) {
-				System.out.println("Found DB_URL in system environment: " + dbUrl);
 				System.setProperty("DB_URL", dbUrl);
 			}
 		}

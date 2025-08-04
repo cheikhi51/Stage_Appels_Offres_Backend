@@ -7,15 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class IOffreService implements OffreService {
-    @Autowired
+
     private final OffreRepository offreRepository;
 
-    public  IOffreService(OffreRepository offreRepository){
+    @Autowired
+    public IOffreService(OffreRepository offreRepository) {
         this.offreRepository = offreRepository;
     }
+
     @Override
     public List<Offre> getAllOffres() {
         return offreRepository.findAll();
@@ -23,39 +26,54 @@ public class IOffreService implements OffreService {
 
     @Override
     public Offre getOffreById(int id) {
-        return offreRepository.findById(String.valueOf(id)).get();
+        return offreRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Offre non trouvée avec l'ID: " + id));
     }
 
     @Override
     public String createOffre(Offre offre) {
+        if (offre == null || offre.getReference_num() == null || offre.getReference_num().isEmpty()) {
+            return "Offre invalide: le numéro de référence est requis.";
+        }
         offreRepository.save(offre);
         return "Création avec succès";
     }
 
     @Override
-    public String updateOffreById(int id, Offre offre) {
-        Offre existingOffre = offreRepository.findById(String.valueOf(id)).orElse(null);
-        if (existingOffre != null && existingOffre.getId_offre() == id) {
-            existingOffre.setDate_limite(offre.getDate_limite());
-            existingOffre.setLieu(offre.getLieu());
-            existingOffre.setObjet(offre.getObjet());
-            existingOffre.setNum_ordre(offre.getNum_ordre());
-            existingOffre.setId_maitre_ouvrage(offre.getId_maitre_ouvrage());
-            existingOffre.setPublication_portail(offre.getPublication_portail());
-            existingOffre.setStatut_admin(offre.getStatut_admin());
-            existingOffre.setStatut_financier(offre.getStatut_financier());
-            existingOffre.setStatut_tech(offre.getStatut_tech());
-            existingOffre.setInformations_additionnelles(offre.getInformations_additionnelles());
-            existingOffre.setReference_num(offre.getReference_num());
-            offreRepository.save(existingOffre);
-            return "Offre mis à our avec succès";
+    public String updateOffreById(int id, Offre updatedOffre) {
+        Optional<Offre> optionalExisting = offreRepository.findById(id);
+
+        if (optionalExisting.isPresent()) {
+            Offre existing = optionalExisting.get();
+            updateOffreFields(existing, updatedOffre);
+            offreRepository.save(existing);
+            return "Offre mise à jour avec succès";
+        } else {
+            return "Offre non trouvée avec l'ID: " + id;
         }
-        return "Offre n'est pas trouvée";
     }
 
     @Override
     public String deleteOffreById(int id) {
-        offreRepository.deleteById(String.valueOf(id));
-        return "suppression avec succèss";
+        if (offreRepository.existsById(id)) {
+            offreRepository.deleteById(id);
+            return "Suppression avec succès";
+        } else {
+            return "Offre non trouvée avec l'ID: " + id;
+        }
+    }
+
+    private void updateOffreFields(Offre existing, Offre updated) {
+        existing.setDate_limite(updated.getDate_limite());
+        existing.setLieu(updated.getLieu());
+        existing.setObjet(updated.getObjet());
+        existing.setNum_ordre(updated.getNum_ordre());
+        existing.setPublication_portail(updated.getPublication_portail());
+        existing.setStatut_admin(updated.getStatut_admin());
+        existing.setStatut_financier(updated.getStatut_financier());
+        existing.setStatut_tech(updated.getStatut_tech());
+        existing.setInformations_additionnelles(updated.getInformations_additionnelles());
+        existing.setReference_num(updated.getReference_num());
+        // Avoid updating IDs unless explicitly required
     }
 }

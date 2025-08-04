@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173/")
 @RestController
 @RequestMapping("/")
 public class OffreController {
@@ -34,7 +33,7 @@ public class OffreController {
     }
     @PutMapping("/api/offres/{id}")
     @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
-    public String updateOffreById(@PathVariable("id") int id,Offre offre){
+    public String updateOffreById(@PathVariable("id") int id, Offre offre){
         offreService.updateOffreById(id,offre);
         return "Offre mis à jour avec succès";
     }
