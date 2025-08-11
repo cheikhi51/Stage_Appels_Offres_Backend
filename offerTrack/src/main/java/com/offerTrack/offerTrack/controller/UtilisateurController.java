@@ -2,7 +2,10 @@ package com.offerTrack.offerTrack.controller;
 
 import com.offerTrack.offerTrack.model.Utilisateur;
 import com.offerTrack.offerTrack.service.UtilisateurService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +30,12 @@ public class UtilisateurController {
     @PreAuthorize("hasRole('ADMIN')")
     public Utilisateur getUtilisateurById(@PathVariable("id") int id){
         return utilisateurService.getUtilisateurById(id);
+    }
+    @GetMapping("/api/me")
+    public ResponseEntity<Utilisateur> getCurrentUser(Authentication authentication) {
+        String email = authentication.getName();
+        Utilisateur user = utilisateurService.findByEmail(email);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/api/utilisateurs")

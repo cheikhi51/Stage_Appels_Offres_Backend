@@ -8,6 +8,7 @@ public class IndicateursMaitreOuvrage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "id_maitre_ouvrage")
     private int id_maitre_ouvrage;
     private int total_appels;
     private int total_participants;

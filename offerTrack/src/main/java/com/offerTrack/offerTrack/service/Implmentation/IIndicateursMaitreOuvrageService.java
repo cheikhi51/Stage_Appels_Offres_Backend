@@ -1,9 +1,7 @@
 package com.offerTrack.offerTrack.service.Implmentation;
 
-import com.offerTrack.offerTrack.model.IndicateursEntreprise;
 import com.offerTrack.offerTrack.model.IndicateursMaitreOuvrage;
 import com.offerTrack.offerTrack.repository.IndicateursMaitreOuvrageRepository;
-import com.offerTrack.offerTrack.service.IndicateursEntrepriseService;
 import com.offerTrack.offerTrack.service.IndicateursMaitreOuvrageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +24,11 @@ public class IIndicateursMaitreOuvrageService implements IndicateursMaitreOuvrag
     }
 
     @Override
-    public IndicateursMaitreOuvrage getIdicateursMOById(int id) {
-        return indicateursMORepository.findById(String.valueOf(id)).get();
+    public IndicateursMaitreOuvrage getIndicateursMOByMaitreOuvrageId(int id_maitre_ouvrage) {
+        return indicateursMORepository.findByIdMaitreOuvrage(id_maitre_ouvrage)
+                .orElseThrow(() -> new RuntimeException("No indicators found for Maitre Ouvrage ID: " + id_maitre_ouvrage));
     }
+
 
     @Override
     public String createIndicateursMO(IndicateursMaitreOuvrage indicateursMO) {
@@ -38,7 +38,7 @@ public class IIndicateursMaitreOuvrageService implements IndicateursMaitreOuvrag
 
     @Override
     public String updateIndicateursMO(int id, IndicateursMaitreOuvrage indicateursMO) {
-        IndicateursMaitreOuvrage existingIndicateursMO = indicateursMORepository.findById(String.valueOf(id)).orElse(null);
+        IndicateursMaitreOuvrage existingIndicateursMO = indicateursMORepository.findById(id).orElse(null);
         if (existingIndicateursMO != null && existingIndicateursMO.getId() == id){
             existingIndicateursMO.setId_maitre_ouvrage(indicateursMO.getId_maitre_ouvrage());
             existingIndicateursMO.setMontant_total(indicateursMO.getMontant_total());
@@ -59,7 +59,7 @@ public class IIndicateursMaitreOuvrageService implements IndicateursMaitreOuvrag
 
     @Override
     public String deleteIndicateursMO(int id) {
-        indicateursMORepository.deleteById(String.valueOf(id));
+        indicateursMORepository.deleteById(id);
         return "Indicateurs Maitre d'Ouvrage supprimés avec succès";
     }
 }

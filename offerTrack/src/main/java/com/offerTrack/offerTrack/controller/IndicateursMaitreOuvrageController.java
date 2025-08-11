@@ -3,6 +3,7 @@ package com.offerTrack.offerTrack.controller;
 
 import com.offerTrack.offerTrack.model.IndicateursMaitreOuvrage;
 import com.offerTrack.offerTrack.service.IndicateursMaitreOuvrageService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,10 +24,10 @@ public class IndicateursMaitreOuvrageController {
     public List<IndicateursMaitreOuvrage> getAllIndicateursMO(){
         return indicateursMOService.getAllIndicateursMO();
     }
-    @GetMapping("/api/indicateursMO/{id}")
+    @GetMapping("/api/indicateursMO/{id_maitre_ouvrage}")
     @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
-    public IndicateursMaitreOuvrage getIndicateursMOById(@PathVariable("id") int id){
-        return indicateursMOService.getIdicateursMOById(id);
+    public ResponseEntity<IndicateursMaitreOuvrage> getIndicateursByMaitreOuvrageId(@PathVariable int id_maitre_ouvrage) {
+        return ResponseEntity.ok(indicateursMOService.getIndicateursMOByMaitreOuvrageId(id_maitre_ouvrage));
     }
     @PostMapping("/api/indicateursMO")
     @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
