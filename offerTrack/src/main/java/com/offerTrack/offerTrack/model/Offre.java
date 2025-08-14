@@ -10,6 +10,7 @@ public class Offre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_offre;
+    @Column(name = "id_maitre_ouvrage")
     private int id_maitre_ouvrage;
     private String reference_num;
     private String objet;

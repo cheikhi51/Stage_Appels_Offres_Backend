@@ -25,15 +25,21 @@ public class OffreController {
     public Offre getOffreById(@PathVariable("id") int id){
         return offreService.getOffreById(id);
     }
+
+    @GetMapping("/api/offresMO/{id_maitre_ouvrage}")
+    @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
+    public List<Offre> getAllOffresByMOId(@PathVariable("id_maitre_ouvrage") int id_maitre_ouvrage){
+        return offreService.findOffreByMaitreOuvrageId(id_maitre_ouvrage);
+    }
     @PostMapping("/api/offres")
     @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
-    public String createOffre(Offre offre){
+    public String createOffre(@RequestBody Offre offre){
         offreService.createOffre(offre);
         return "Offre créé avec succès";
     }
     @PutMapping("/api/offres/{id}")
     @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
-    public String updateOffreById(@PathVariable("id") int id, Offre offre){
+    public String updateOffreById(@PathVariable("id") int id,@RequestBody  Offre offre){
         offreService.updateOffreById(id,offre);
         return "Offre mis à jour avec succès";
     }
