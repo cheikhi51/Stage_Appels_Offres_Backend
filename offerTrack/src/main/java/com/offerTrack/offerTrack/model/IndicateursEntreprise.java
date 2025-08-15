@@ -8,6 +8,7 @@ public class IndicateursEntreprise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "id_concurrent")
     private int id_concurrent;
     private int nb_ao_total;
     private int nb_ao_reussis;

@@ -2,12 +2,13 @@ package com.offerTrack.offerTrack.controller;
 
 import com.offerTrack.offerTrack.model.IndicateursEntreprise;
 import com.offerTrack.offerTrack.service.IndicateursEntrepriseService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173/")
+
 @RestController
 @RequestMapping("/")
 public class IndicateursEntrepriseController {
@@ -25,6 +26,12 @@ public class IndicateursEntrepriseController {
     @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN')")
     public IndicateursEntreprise getIndicateursEntById(@PathVariable("id") int id, IndicateursEntreprise indicateursEnt){
         return indicateursEntService.getIndicateursEntById(id);
+    }
+
+    @GetMapping("/api/indicateursConcurrent/{id_concurrent}")
+    @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN')")
+    public ResponseEntity<IndicateursEntreprise> getIndicateursEntByConId(@PathVariable("id_concurrent") int id_concurrent){
+        return  ResponseEntity.ok(indicateursEntService.getIndicateursEntByConId(id_concurrent));
     }
 
     @PostMapping("/api/indicateursEntreprise")

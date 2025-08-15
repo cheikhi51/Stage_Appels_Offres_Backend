@@ -23,7 +23,13 @@ public class IIndicateursEntrepriseService implements IndicateursEntrepriseServi
 
     @Override
     public IndicateursEntreprise getIndicateursEntById(int id) {
-        return indicateursEntRepository.findById(String.valueOf(id)).get();
+        return indicateursEntRepository.findById(id).get();
+    }
+
+    @Override
+    public IndicateursEntreprise getIndicateursEntByConId(int id_concurrent) {
+        return indicateursEntRepository.findByIdConcurrent(id_concurrent)
+                .orElseThrow(() -> new RuntimeException("No indicators found for Maitre Ouvrage ID: " + id_concurrent));
     }
 
     @Override
@@ -34,7 +40,7 @@ public class IIndicateursEntrepriseService implements IndicateursEntrepriseServi
 
     @Override
     public String updateIndicateursEntById(int id, IndicateursEntreprise indicateursEntreprise) {
-        IndicateursEntreprise existingindicateursEnt = indicateursEntRepository.findById(String.valueOf(id)).orElse(null);
+        IndicateursEntreprise existingindicateursEnt = indicateursEntRepository.findById(id).orElse(null);
         if(existingindicateursEnt != null && existingindicateursEnt.getId() == id){
             existingindicateursEnt.setId_concurrent(indicateursEntreprise.getId_concurrent());
             existingindicateursEnt.setGain_total(indicateursEntreprise.getGain_total());
@@ -53,7 +59,7 @@ public class IIndicateursEntrepriseService implements IndicateursEntrepriseServi
 
     @Override
     public String deleteIndicateursEntById(int id) {
-        indicateursEntRepository.deleteById(String.valueOf(id));
+        indicateursEntRepository.deleteById(id);
         return "Indicateurs Entreprise Supprimés!";
     }
 }

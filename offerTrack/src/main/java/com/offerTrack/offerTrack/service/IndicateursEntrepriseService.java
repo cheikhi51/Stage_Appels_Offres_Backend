@@ -9,6 +9,7 @@ import java.util.List;
 public interface IndicateursEntrepriseService{
     List<IndicateursEntreprise> getAllIndicateursEnt();
     IndicateursEntreprise getIndicateursEntById(int id);
+    IndicateursEntreprise getIndicateursEntByConId(int id_concurrent);
     String createIndicateursEnt(IndicateursEntreprise indicateursEntreprise);
     String updateIndicateursEntById(int id,IndicateursEntreprise indicateursEntreprise);
     String deleteIndicateursEntById(int id);

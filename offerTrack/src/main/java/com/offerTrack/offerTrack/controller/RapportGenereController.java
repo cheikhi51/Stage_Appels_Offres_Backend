@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173/")
+
 @RestController
 @RequestMapping("/")
 public class RapportGenereController {
@@ -31,14 +31,14 @@ public class RapportGenereController {
 
     @PostMapping("/api/rapportGenere")
     @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
-    public String createRapport(RapportGenere rapportGenere){
+    public String createRapport(@RequestBody RapportGenere rapportGenere){
         rapportGenereService.createRapport(rapportGenere);
         return "Rapport créé avec succès";
     }
 
     @PutMapping("/api/rapportGenere/{id}")
     @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
-    public  String updateRapport(@PathVariable("id") int id,RapportGenere rapportGenere){
+    public  String updateRapport(@PathVariable("id") int id,@RequestBody RapportGenere rapportGenere){
         rapportGenereService.updateRapport(id,rapportGenere);
         return "Rapport modifié avec succès";
     }
