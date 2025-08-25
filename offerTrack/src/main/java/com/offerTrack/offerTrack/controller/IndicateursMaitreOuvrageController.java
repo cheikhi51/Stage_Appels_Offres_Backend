@@ -35,10 +35,10 @@ public class IndicateursMaitreOuvrageController {
         indicateursMOService.createIndicateursMO(indicateursMO);
         return "Les Indicateurs Maitre d'Ouvrage sont crées avec succès";
     }
-    @PutMapping("/api/indicateursMO/{id}")
+    @PutMapping("/api/indicateursMO/{id_maitre_ouvrage}")
     @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
-    public  String updateIndicateursMO(@PathVariable("id") int id,IndicateursMaitreOuvrage indicateursMO){
-        indicateursMOService.updateIndicateursMO(id,indicateursMO);
+    public  String updateIndicateursMO(@PathVariable("id_maitre_ouvrage") int id_maitre_ouvrage,@RequestBody IndicateursMaitreOuvrage indicateursMO){
+        indicateursMOService.updateIndicateursMO(id_maitre_ouvrage,indicateursMO);
         return "Les Indicateurs Maitre d'Ouvrage Modifiées avec succès";
     }
     @DeleteMapping("/api/indicateursMO/{id}")

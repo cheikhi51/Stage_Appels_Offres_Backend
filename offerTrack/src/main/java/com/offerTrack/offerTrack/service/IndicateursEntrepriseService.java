@@ -11,7 +11,7 @@ public interface IndicateursEntrepriseService{
     IndicateursEntreprise getIndicateursEntById(int id);
     IndicateursEntreprise getIndicateursEntByConId(int id_concurrent);
     String createIndicateursEnt(IndicateursEntreprise indicateursEntreprise);
-    String updateIndicateursEntById(int id,IndicateursEntreprise indicateursEntreprise);
+    String updateIndicateursEntById(int id_concurrent,IndicateursEntreprise indicateursEntreprise);
     String deleteIndicateursEntById(int id);
 
 }

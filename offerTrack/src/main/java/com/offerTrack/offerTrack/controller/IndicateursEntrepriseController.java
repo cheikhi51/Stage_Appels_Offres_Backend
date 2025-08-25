@@ -41,10 +41,10 @@ public class IndicateursEntrepriseController {
         return "Indicateurs Entreprise créés avec succès";
     }
 
-    @PutMapping("/api/indicateursEntreprise/{id}")
+    @PutMapping("/api/indicateursEntreprise/{id_concurrent}")
     @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN')")
-    public String updateIndicateusEnt(@PathVariable("id") int id,IndicateursEntreprise indicateursEnt){
-        indicateursEntService.updateIndicateursEntById(id,indicateursEnt);
+    public String updateIndicateusEnt(@PathVariable("id_concurrent") int id_concurrent,@RequestBody  IndicateursEntreprise indicateursEnt){
+        indicateursEntService.updateIndicateursEntById(id_concurrent,indicateursEnt);
         return "Indicateurs Entreprise mise à jour avec succès";
     }
 

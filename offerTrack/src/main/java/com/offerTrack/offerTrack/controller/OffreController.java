@@ -41,6 +41,92 @@ public class OffreController {
         return "Offre créé avec succès";
     }
 
+    // Get all offers with their participants for a maitre d'ouvrage
+    @GetMapping("/api/offres-with-participants/{id_maitre_ouvrage}")
+    @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
+    public ResponseEntity<?> getOffresWithParticipants(@PathVariable("id_maitre_ouvrage") int idMaitreOuvrage) {
+        try {
+            List<Map<String, Object>> offresWithParticipants = offreService.getOffresWithParticipantsByMaitreOuvrage(idMaitreOuvrage);
+            return ResponseEntity.ok(offresWithParticipants);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(createErrorResponse("An error occurred: " + e.getMessage()));
+        }
+    }
+
+    // Accept or refuse a participant for an offer
+    @PutMapping("/api/offres/{offreId}/participants/{userId}/status")
+    @PreAuthorize("hasRole('MAITREOUVRAGE') or hasRole('ADMIN')")
+    public ResponseEntity<?> updateParticipantStatus(
+            @PathVariable("offreId") int offreId,
+            @PathVariable("userId") int userId,
+            @RequestBody Map<String, Object> request) {
+        try {
+            String status = (String) request.get("status"); // "ACCEPTED", "REFUSED", or "PENDING"
+
+            if (status == null || (!status.equals("ACCEPTED") && !status.equals("REFUSED") && !status.equals("PENDING"))) {
+                return ResponseEntity.badRequest().body(createErrorResponse("Status must be ACCEPTED, REFUSED, or PENDING"));
+            }
+
+            String result = offreService.updateParticipantStatus(offreId, userId, status);
+
+            if (result.contains("succès")) {
+                return ResponseEntity.ok(createSuccessResponse(result));
+            } else {
+                return ResponseEntity.badRequest().body(createErrorResponse(result));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(createErrorResponse("An error occurred: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/api/offres/total-remportees")
+    @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
+    public ResponseEntity<?> getTotalOffresRemportees() {
+        try {
+            int totalRemportees = offreService.getTotalOffresRemportees();
+            Map<String, Object> response = new HashMap<>();
+            response.put("totalOffresRemportees", totalRemportees);
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(createErrorResponse("An error occurred: " + e.getMessage()));
+        }
+    }
+
+
+        // Get participants for a specific offer with their status
+    @GetMapping("/api/offres/{id}/participants")
+    @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
+    public ResponseEntity<?> getOffreParticipants(@PathVariable("id") int id) {
+        try {
+            List<Map<String, Object>> participants = offreService.getOffreParticipants(id);
+            return ResponseEntity.ok(participants);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(createErrorResponse("An error occurred: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/api/offres/{offreId}/participant-status/{userId}")
+    @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
+    public ResponseEntity<?> getParticipantStatus(
+            @PathVariable("offreId") int offreId,
+            @PathVariable("userId") int userId) {
+        try {
+            String status = offreService.getParticipantStatus(offreId, userId);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", status);
+            response.put("offreId", offreId);
+            response.put("userId", userId);
+            response.put("success", true);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(createErrorResponse("An error occurred: " + e.getMessage()));
+        }
+    }
+
     @PostMapping("/api/offres/{id}/participate")
     @PreAuthorize("hasRole('CONCURRENT') or hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
     public ResponseEntity<?> addParticipant(@PathVariable("id") int id, @RequestBody Map<String, Object> request) {

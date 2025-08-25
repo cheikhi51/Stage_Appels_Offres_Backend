@@ -8,6 +8,6 @@ public interface IndicateursMaitreOuvrageService {
     List<IndicateursMaitreOuvrage> getAllIndicateursMO();
     IndicateursMaitreOuvrage getIndicateursMOByMaitreOuvrageId(int id_maitre_ouvrage);
     String createIndicateursMO(IndicateursMaitreOuvrage indicateursMO);
-    String updateIndicateursMO(int id, IndicateursMaitreOuvrage indicateursMO);
+    String updateIndicateursMO(int id_maitre_ouvrage, IndicateursMaitreOuvrage indicateursMO);
     String deleteIndicateursMO(int id);
 }

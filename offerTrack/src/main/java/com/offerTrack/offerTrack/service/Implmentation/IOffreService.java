@@ -6,8 +6,7 @@ import com.offerTrack.offerTrack.service.OffreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class IOffreService implements OffreService {
@@ -96,6 +95,8 @@ public class IOffreService implements OffreService {
             return "Offre non trouvée avec l'ID: " + id;
         }
     }
+
+
 
     // NEW PARTICIPATION METHODS
     @Override
@@ -195,6 +196,111 @@ public class IOffreService implements OffreService {
         } catch (Exception e) {
             return Optional.empty();
         }
+    }
+
+    // NEW METHOD IMPLEMENTATIONS:
+
+    @Override
+    public List<Map<String, Object>> getOffresWithParticipantsByMaitreOuvrage(int idMaitreOuvrage) {
+        try {
+            List<Offre> offres = offreRepository.findOffreByMaitreOuvrageId(idMaitreOuvrage);
+            List<Map<String, Object>> result = new ArrayList<>();
+
+            for (Offre offre : offres) {
+                Map<String, Object> offreData = new HashMap<>();
+                offreData.put("offre", offre);
+                offreData.put("participantCount", offre.getParticipantCount());
+                offreData.put("participantIds", offre.getParticipantIds());
+                result.add(offreData);
+            }
+
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la récupération des offres avec participants: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String updateParticipantStatus(int offreId, int userId, String status) {
+        try {
+            Optional<Offre> offreOpt = offreRepository.findById(offreId);
+            if (offreOpt.isEmpty()) {
+                return "Offre non trouvée avec l'ID: " + offreId;
+            }
+
+            Offre offre = offreOpt.get();
+
+            // Check if user has participated
+            if (!offre.hasParticipated(userId)) {
+                return "L'utilisateur n'a pas participé à cette offre";
+            }
+
+            // Update participant status
+            offre.updateParticipantStatus(userId, status);
+            offreRepository.save(offre);
+
+            return "Statut du participant mis à jour avec succès: " + status;
+
+        } catch (Exception e) {
+            return "Erreur lors de la mise à jour du statut: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> getOffreParticipants(int offreId) {
+        try {
+            Optional<Offre> offreOpt = offreRepository.findById(offreId);
+            if (offreOpt.isEmpty()) {
+                throw new RuntimeException("Offre non trouvée avec l'ID: " + offreId);
+            }
+
+            Offre offre = offreOpt.get();
+            List<Map<String, Object>> participants = new ArrayList<>();
+
+            for (Integer userId : offre.getParticipantIds()) {
+                Map<String, Object> participantData = new HashMap<>();
+                participantData.put("userId", userId);
+                // Note: You'll need to fetch user details from a UserService/Repository
+                // For now, we only return the user ID
+                participantData.put("status", "PENDING"); // Default status
+                participants.add(participantData);
+            }
+
+            return participants;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la récupération des participants: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String getParticipantStatus(int offreId, int userId) {
+        try {
+            Optional<Offre> offreOpt = offreRepository.findById(offreId);
+            if (offreOpt.isEmpty()) {
+                return "PENDING";
+            }
+
+            Offre offre = offreOpt.get();
+            return offre.getParticipantStatus(userId);
+        } catch (Exception e) {
+            return "PENDING";
+        }
+    }
+    @Override
+    public int getTotalOffresRemportees() {
+        List<Offre> allOffres = offreRepository.findAll();
+        int count = 0;
+
+        for (Offre offre : allOffres) {
+            // Vérifie si l'offre a au moins un participant avec le statut "ACCEPTED"
+            if (offre.getParticipantStatuses() != null &&
+                    offre.getParticipantStatuses().containsValue("ACCEPTED")) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
 }

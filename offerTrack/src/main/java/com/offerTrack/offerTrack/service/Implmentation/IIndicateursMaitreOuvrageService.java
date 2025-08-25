@@ -37,10 +37,9 @@ public class IIndicateursMaitreOuvrageService implements IndicateursMaitreOuvrag
     }
 
     @Override
-    public String updateIndicateursMO(int id, IndicateursMaitreOuvrage indicateursMO) {
-        IndicateursMaitreOuvrage existingIndicateursMO = indicateursMORepository.findById(id).orElse(null);
-        if (existingIndicateursMO != null && existingIndicateursMO.getId() == id){
-            existingIndicateursMO.setId_maitre_ouvrage(indicateursMO.getId_maitre_ouvrage());
+    public String updateIndicateursMO(int id_maitre_ouvrage, IndicateursMaitreOuvrage indicateursMO) {
+        IndicateursMaitreOuvrage existingIndicateursMO = indicateursMORepository.findByIdMaitreOuvrage(id_maitre_ouvrage).orElse(null);
+        if (existingIndicateursMO != null ){
             existingIndicateursMO.setMontant_total(indicateursMO.getMontant_total());
             existingIndicateursMO.setTaux_attribution(indicateursMO.getTaux_attribution());
             existingIndicateursMO.setTotal_appels(indicateursMO.getTotal_appels());

@@ -39,10 +39,9 @@ public class IIndicateursEntrepriseService implements IndicateursEntrepriseServi
     }
 
     @Override
-    public String updateIndicateursEntById(int id, IndicateursEntreprise indicateursEntreprise) {
-        IndicateursEntreprise existingindicateursEnt = indicateursEntRepository.findById(id).orElse(null);
-        if(existingindicateursEnt != null && existingindicateursEnt.getId() == id){
-            existingindicateursEnt.setId_concurrent(indicateursEntreprise.getId_concurrent());
+    public String updateIndicateursEntById(int id_concurrent, IndicateursEntreprise indicateursEntreprise) {
+        IndicateursEntreprise existingindicateursEnt = indicateursEntRepository.findByIdConcurrent(id_concurrent).orElse(null);
+        if(existingindicateursEnt != null) {
             existingindicateursEnt.setGain_total(indicateursEntreprise.getGain_total());
             existingindicateursEnt.setNb_ao_reussis(indicateursEntreprise.getNb_ao_reussis());
             existingindicateursEnt.setNb_ao_total(indicateursEntreprise.getNb_ao_total());
