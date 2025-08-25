@@ -20,14 +20,14 @@ public class UtilisateurController {
     }
 
     @GetMapping("/api/utilisateurs")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
     public List<Utilisateur> getUtilisateurs(){
         return utilisateurService.getAllUtilisateur();
     }
 
 
     @GetMapping("/api/utilisateurs/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAITREOUVRAGE')")
     public Utilisateur getUtilisateurById(@PathVariable("id") int id){
         return utilisateurService.getUtilisateurById(id);
     }
