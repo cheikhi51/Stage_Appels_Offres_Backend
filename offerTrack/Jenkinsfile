@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'JDK17'      // make sure to configure this in Jenkins -> Global Tool Configuration
+        maven 'Maven3'   // same here
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/cheikhi51/Stage_Appels_Offres_Backend.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'mvn package -DskipTests'
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                }
+            }
+        }
+
+        stage('Deploy (Optional)') {
+            steps {
+                echo 'Deploying backend application...'
+                // add deployment logic here later (e.g., copy .jar to server or Docker build)
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Backend pipeline completed successfully!'
+        }
+        failure {
+            echo '❌ Backend pipeline failed.'
+        }
+    }
+}
