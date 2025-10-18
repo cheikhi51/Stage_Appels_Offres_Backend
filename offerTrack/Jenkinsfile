@@ -15,33 +15,22 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
         stage('Package') {
             steps {
-                sh 'mvn package -DskipTests'
-            }
-            post {
-                success {
-                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-                }
+                bat 'mvn package -DskipTests'
             }
         }
 
-        stage('Deploy (Optional)') {
-            steps {
-                echo 'Deploying backend application...'
-                // add deployment logic here later (e.g., copy .jar to server or Docker build)
-            }
-        }
     }
 
     post {
