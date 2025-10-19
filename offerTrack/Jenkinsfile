@@ -77,7 +77,7 @@ pipeline {
                 dir('offerTrack') {
                     script {
                         // 🔹 Utilise le nom de ton serveur SonarQube configuré dans Jenkins
-                        withSonarQubeEnv('MySonarQubeServer') {
+                        withSonarQubeEnv('MySonnarQubeServer') {
                             bat """
                                 mvn sonar:sonar ^
                                     -Dsonar.projectKey=offertrack-backend ^
