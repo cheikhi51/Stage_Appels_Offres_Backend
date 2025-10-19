@@ -15,22 +15,27 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean compile'
+                dir('offerTrack') {
+                    bat 'mvn clean compile'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                bat 'mvn test'
+                dir('offerTrack') {
+                    bat 'mvn test'
+                }
             }
         }
 
         stage('Package') {
             steps {
-                bat 'mvn package -DskipTests'
+                dir('offerTrack') {
+                    bat 'mvn package -DskipTests'
+                }
             }
         }
-
     }
 
     post {
