@@ -19,6 +19,7 @@ pipeline {
                     script {
                         withCredentials([
                             string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
+                            string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
                             usernamePassword(
                                 credentialsId: 'postgres-db-credentials',
                                 usernameVariable: 'DB_USERNAME',
@@ -30,6 +31,7 @@ pipeline {
                                 set DB_URL=%DB_URL%
                                 set DB_USERNAME=%DB_USERNAME%
                                 set DB_PASSWORD=%DB_PASSWORD%
+                                set JWT_SECRET=%JWT_SECRET%
                                 mvn clean compile
                             """
                         }
@@ -44,6 +46,7 @@ pipeline {
                     script {
                         withCredentials([
                             string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
+                            string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
                             usernamePassword(
                                 credentialsId: 'postgres-db-credentials',
                                 usernameVariable: 'DB_USERNAME',
@@ -55,6 +58,7 @@ pipeline {
                                 set DB_URL=%DB_URL%
                                 set DB_USERNAME=%DB_USERNAME%
                                 set DB_PASSWORD=%DB_PASSWORD%
+                                set JWT_SECRET=%JWT_SECRET%
                                 mvn test
                             """
                         }
@@ -69,6 +73,7 @@ pipeline {
                     script {
                         withCredentials([
                             string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
+                            string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
                             usernamePassword(
                                 credentialsId: 'postgres-db-credentials',
                                 usernameVariable: 'DB_USERNAME',
@@ -80,6 +85,7 @@ pipeline {
                                 set DB_URL=%DB_URL%
                                 set DB_USERNAME=%DB_USERNAME%
                                 set DB_PASSWORD=%DB_PASSWORD%
+                                set JWT_SECRET=%JWT_SECRET%
                                 mvn package -DskipTests
                             """
                         }
