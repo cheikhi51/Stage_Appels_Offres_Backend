@@ -72,21 +72,17 @@ pipeline {
             }
         }
 
-       stage('SonarQube Analysis') {
-           steps {
-               dir('offerTrack') {
-                   script {
-                       withSonarQubeEnv('MySonnarQubeServer') {
-                           bat """
-                               mvn sonar:sonar ^
-                                   -Dsonar.projectKey=offertrack-backend ^
-                                   -Dsonar.projectName=OfferTrack_Backend
-                           """
-                       }
-                   }
-               }
-           }
-       }
+        stage('SonarQube Analysis') {
+              steps {
+                  dir('offerTrack') {
+                      script {
+                          withSonarQubeEnv('MySonnarQubeServer') {
+                              bat 'mvn sonar:sonar -Dsonar.projectKey=offertrack-backend'
+                          }
+                      }
+                  }
+              }
+          }
 
         stage('Package') {
             steps {
