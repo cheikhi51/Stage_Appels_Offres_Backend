@@ -25,13 +25,11 @@ pipeline {
                                 passwordVariable: 'DB_PASSWORD'
                             )
                         ]) {
-                            bat """
-                                set DB_DRIVER_CLASS_NAME=org.postgresql.Driver
-                                set DB_URL=%DB_URL%
-                                set DB_USERNAME=%DB_USERNAME%
-                                set DB_PASSWORD=%DB_PASSWORD%
-                                mvn clean compile
-                            """
+                            withEnv([
+                                "DB_DRIVER_CLASS_NAME=org.postgresql.Driver"
+                            ]) {
+                                bat 'mvn clean compile'
+                            }
                         }
                     }
                 }
@@ -50,13 +48,11 @@ pipeline {
                                 passwordVariable: 'DB_PASSWORD'
                             )
                         ]) {
-                            bat """
-                                set DB_DRIVER_CLASS_NAME=org.postgresql.Driver
-                                set DB_URL=%DB_URL%
-                                set DB_USERNAME=%DB_USERNAME%
-                                set DB_PASSWORD=%DB_PASSWORD%
-                                mvn test
-                            """
+                            withEnv([
+                                "DB_DRIVER_CLASS_NAME=org.postgresql.Driver"
+                            ]) {
+                                bat 'mvn test'
+                            }
                         }
                     }
                 }
@@ -75,13 +71,11 @@ pipeline {
                                 passwordVariable: 'DB_PASSWORD'
                             )
                         ]) {
-                            bat """
-                                set DB_DRIVER_CLASS_NAME=org.postgresql.Driver
-                                set DB_URL=%DB_URL%
-                                set DB_USERNAME=%DB_USERNAME%
-                                set DB_PASSWORD=%DB_PASSWORD%
-                                mvn package -DskipTests
-                            """
+                            withEnv([
+                                "DB_DRIVER_CLASS_NAME=org.postgresql.Driver"
+                            ]) {
+                                bat 'mvn package -DskipTests'
+                            }
                         }
                     }
                 }
@@ -97,8 +91,7 @@ pipeline {
             echo '❌ Backend pipeline failed.'
         }
         always {
-            // Clean workspace to remove any sensitive data
-            cleanWs(cleanWhenNotBuilt: false, cleanWhenFailure: true)
+            cleanWs(cleanWhenFailure: true)
         }
     }
 }
