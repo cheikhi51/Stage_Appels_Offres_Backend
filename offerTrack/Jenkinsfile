@@ -20,6 +20,7 @@ pipeline {
                         withCredentials([
                             string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
                             string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
+                            string(credentialsId: 'jwt-expiration', variable: 'JWT_EXPIRATION'),
                             usernamePassword(
                                 credentialsId: 'postgres-db-credentials',
                                 usernameVariable: 'DB_USERNAME',
@@ -32,6 +33,7 @@ pipeline {
                                 set DB_USERNAME=%DB_USERNAME%
                                 set DB_PASSWORD=%DB_PASSWORD%
                                 set JWT_SECRET=%JWT_SECRET%
+                                set JWT_EXPIRATION=%JWT_EXPIRATION%
                                 mvn clean compile
                             """
                         }
@@ -47,6 +49,7 @@ pipeline {
                         withCredentials([
                             string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
                             string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
+                            string(credentialsId: 'jwt-expiration', variable: 'JWT_EXPIRATION'),
                             usernamePassword(
                                 credentialsId: 'postgres-db-credentials',
                                 usernameVariable: 'DB_USERNAME',
@@ -59,6 +62,7 @@ pipeline {
                                 set DB_USERNAME=%DB_USERNAME%
                                 set DB_PASSWORD=%DB_PASSWORD%
                                 set JWT_SECRET=%JWT_SECRET%
+                                set JWT_EXPIRATION=%JWT_EXPIRATION%
                                 mvn test
                             """
                         }
@@ -74,6 +78,7 @@ pipeline {
                         withCredentials([
                             string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
                             string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
+                            string(credentialsId: 'jwt-expiration', variable: 'JWT_EXPIRATION'),
                             usernamePassword(
                                 credentialsId: 'postgres-db-credentials',
                                 usernameVariable: 'DB_USERNAME',
@@ -86,6 +91,7 @@ pipeline {
                                 set DB_USERNAME=%DB_USERNAME%
                                 set DB_PASSWORD=%DB_PASSWORD%
                                 set JWT_SECRET=%JWT_SECRET%
+                                set JWT_EXPIRATION=%JWT_EXPIRATION%
                                 mvn package -DskipTests
                             """
                         }
