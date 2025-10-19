@@ -7,6 +7,7 @@ pipeline {
     }
 
     stages {
+
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/cheikhi51/Stage_Appels_Offres_Backend.git'
@@ -64,6 +65,25 @@ pipeline {
                                 set JWT_SECRET=%JWT_SECRET%
                                 set JWT_EXPIRATION=%JWT_EXPIRATION%
                                 mvn test
+                            """
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('offerTrack') {
+                    script {
+                        // 🔹 Utilise le nom de ton serveur SonarQube configuré dans Jenkins
+                        withSonarQubeEnv('MySonarQubeServer') {
+                            bat """
+                                mvn sonar:sonar ^
+                                    -Dsonar.projectKey=offertrack-backend ^
+                                    -Dsonar.projectName=OfferTrack_Backend ^
+                                    -Dsonar.host.url=%SONAR_HOST_URL% ^
+                                    -Dsonar.login=%SONAR_AUTH_TOKEN%
                             """
                         }
                     }
