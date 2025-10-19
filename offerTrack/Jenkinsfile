@@ -16,7 +16,24 @@ pipeline {
         stage('Build') {
             steps {
                 dir('offerTrack') {
-                    bat 'mvn clean compile'
+                    script {
+                        withCredentials([
+                            string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
+                            usernamePassword(
+                                credentialsId: 'postgres-db-credentials',
+                                usernameVariable: 'DB_USERNAME',
+                                passwordVariable: 'DB_PASSWORD'
+                            )
+                        ]) {
+                            bat """
+                                set DB_DRIVER_CLASS_NAME=org.postgresql.Driver
+                                set DB_URL=%DB_URL%
+                                set DB_USERNAME=%DB_USERNAME%
+                                set DB_PASSWORD=%DB_PASSWORD%
+                                mvn clean compile
+                            """
+                        }
+                    }
                 }
             }
         }
@@ -24,7 +41,24 @@ pipeline {
         stage('Test') {
             steps {
                 dir('offerTrack') {
-                    bat 'mvn test'
+                    script {
+                        withCredentials([
+                            string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
+                            usernamePassword(
+                                credentialsId: 'postgres-db-credentials',
+                                usernameVariable: 'DB_USERNAME',
+                                passwordVariable: 'DB_PASSWORD'
+                            )
+                        ]) {
+                            bat """
+                                set DB_DRIVER_CLASS_NAME=org.postgresql.Driver
+                                set DB_URL=%DB_URL%
+                                set DB_USERNAME=%DB_USERNAME%
+                                set DB_PASSWORD=%DB_PASSWORD%
+                                mvn test
+                            """
+                        }
+                    }
                 }
             }
         }
@@ -32,7 +66,24 @@ pipeline {
         stage('Package') {
             steps {
                 dir('offerTrack') {
-                    bat 'mvn package -DskipTests'
+                    script {
+                        withCredentials([
+                            string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
+                            usernamePassword(
+                                credentialsId: 'postgres-db-credentials',
+                                usernameVariable: 'DB_USERNAME',
+                                passwordVariable: 'DB_PASSWORD'
+                            )
+                        ]) {
+                            bat """
+                                set DB_DRIVER_CLASS_NAME=org.postgresql.Driver
+                                set DB_URL=%DB_URL%
+                                set DB_USERNAME=%DB_USERNAME%
+                                set DB_PASSWORD=%DB_PASSWORD%
+                                mvn package -DskipTests
+                            """
+                        }
+                    }
                 }
             }
         }
@@ -44,6 +95,10 @@ pipeline {
         }
         failure {
             echo '❌ Backend pipeline failed.'
+        }
+        always {
+            // Clean workspace to remove any sensitive data
+            cleanWs(cleanWhenNotBuilt: false, cleanWhenFailure: true)
         }
     }
 }
