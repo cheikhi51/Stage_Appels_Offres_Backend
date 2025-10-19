@@ -72,24 +72,21 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                dir('offerTrack') {
-                    script {
-                        // 🔹 Utilise le nom de ton serveur SonarQube configuré dans Jenkins
-                        withSonarQubeEnv('MySonnarQubeServer') {
-                            bat """
-                                mvn sonar:sonar ^
-                                    -Dsonar.projectKey=offertrack-backend ^
-                                    -Dsonar.projectName=OfferTrack_Backend ^
-                                    -Dsonar.host.url=%SONAR_HOST_URL% ^
-                                    -Dsonar.login=%SONAR_AUTH_TOKEN%
-                            """
-                        }
-                    }
-                }
-            }
-        }
+       stage('SonarQube Analysis') {
+           steps {
+               dir('offerTrack') {
+                   script {
+                       withSonarQubeEnv('MySonnarQubeServer') {
+                           bat """
+                               mvn sonar:sonar ^
+                                   -Dsonar.projectKey=offertrack-backend ^
+                                   -Dsonar.projectName=OfferTrack_Backend
+                           """
+                       }
+                   }
+               }
+           }
+       }
 
         stage('Package') {
             steps {
