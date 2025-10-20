@@ -73,16 +73,22 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-              steps {
-                  dir('offerTrack') {
-                      script {
-                          withSonarQubeEnv('MySonarQubeServer') {
-                              bat 'mvn sonar:sonar -Dsonar.projectKey=offertrack-backend'
-                          }
-                      }
-                  }
-              }
-          }
+            steps {
+                dir('offerTrack') {
+                    script {
+                        withSonarQubeEnv('MySonarQubeServer') {
+                            bat """
+                                mvn sonar:sonar ^
+                                -Dsonar.projectKey=offertrack-backend ^
+                                -Dsonar.host.url=%SONAR_HOST_URL% ^
+                                -Dsonar.token=%SONAR_AUTH_TOKEN%
+                            """
+                        }
+                    }
+                }
+            }
+        }
+
 
         stage('Package') {
             steps {
