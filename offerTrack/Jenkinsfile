@@ -76,7 +76,7 @@ pipeline {
             steps {
                 dir('offerTrack') {
                     script {
-                        withSonarQubeEnv('MySonarQubeServer') {
+                        withSonarQubeEnv('SonnarQubeServer') {
                             withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                                 bat """
                                     mvn sonar:sonar ^
