@@ -76,7 +76,7 @@ pipeline {
               steps {
                   dir('offerTrack') {
                       script {
-                          withSonarQubeEnv('MySonnarQubeServer') {
+                          withSonarQubeEnv('MySonarQubeServer') {
                               bat 'mvn sonar:sonar -Dsonar.projectKey=offertrack-backend'
                           }
                       }
