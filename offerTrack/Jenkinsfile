@@ -77,12 +77,14 @@ pipeline {
                 dir('offerTrack') {
                     script {
                         withSonarQubeEnv('MySonarQubeServer') {
-                            bat """
-                                mvn sonar:sonar ^
-                                -Dsonar.projectKey=offertrack-backend ^
-                                -Dsonar.host.url=%SONAR_HOST_URL% ^
-                                -Dsonar.token=%SONAR_AUTH_TOKEN%
-                            """
+                            withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                                bat """
+                                    mvn sonar:sonar ^
+                                    -Dsonar.projectKey=offertrack-backend ^
+                                    -Dsonar.host.url=%SONAR_HOST_URL% ^
+                                    -Dsonar.token=%SONAR_TOKEN%
+                                """
+                            }
                         }
                     }
                 }
