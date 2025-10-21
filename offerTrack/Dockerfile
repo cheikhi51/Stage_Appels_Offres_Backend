@@ -19,8 +19,8 @@ WORKDIR /app
 # Copier le fichier JAR depuis l’étape de build
 COPY --from=build /app/target/*.jar app.jar
 
-# Exposer le port de ton application (par défaut 8080)
-EXPOSE 8080
+# Exposer le port de ton application (par défaut 8081)
+EXPOSE 8081
 
 # Lancer l'application
 ENTRYPOINT ["java", "-jar", "app.jar"]
